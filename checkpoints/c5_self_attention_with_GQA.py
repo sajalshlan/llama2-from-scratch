@@ -41,7 +41,7 @@ import torch
 import math
 import torch.nn as nn
 import KVCache from c4_kv_cache
-
+import apply_rotary_embeddings from c3_rope
 
 class SelfAttention(nn.Module):
     def __init__(self, args: ModelArgs):

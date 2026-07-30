@@ -13,10 +13,10 @@
 
 def precompute_theta_pos_frequencies(head_dim: int, seq_len: int, device: str, theta: float = 10000.0) -> torch.Tensor:
     freqs = 1.0 / (theta ** (torch.arrange(0, head_dim, 2).float() / head_dim))
-    positions = torch.outer(positions.float(), freqs)
+    positions = torch.arange(seq_len, device=device)
     angles = torch.outer(positions.float(), freqs)
     freqs_complex = torch.polar(torch.ones_like(angles), angles) # converts each angle into a complex number on the unit circle: `cos(angle) + i·sin(angle)`. complex multiplication is rotation.
-    return freqs_complex
+    return freqs_complex.to(device)
 
 def apply_rotary_embeddings(x: torch.Tensor, freqs_complex: torch.Tensor, device: str) -> torch.Tensor:
     x_complex = torch.view_as_complex(x.float().reshape(*x.shape[:-1], -1, 2))
